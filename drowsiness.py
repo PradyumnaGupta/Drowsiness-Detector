@@ -6,8 +6,6 @@ import numpy as np
 import imutils
 import dlib
 import cv2
-temp1=0
-temp2=0
 count=0
 blink=0
 sleep=0
