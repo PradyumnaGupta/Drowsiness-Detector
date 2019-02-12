@@ -1,11 +1,17 @@
 from imutils import face_utils
 from scipy.spatial import distance as dist
+import pygame #For playing sound
+
+pygame.mixer.init()
+pygame.mixer.music.load('audio/alert.wav')
 
 import numpy as np
 
 import imutils
 import dlib
 import cv2
+temp1=0
+temp2=0
 count=0
 blink=0
 sleep=0
@@ -23,7 +29,7 @@ cap =  cv2.VideoCapture(0)
 
 detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
-
+ear=1
 while (True):
 
     ret, image=cap.read()
@@ -33,7 +39,7 @@ while (True):
     rects = detector(gray, 1)
     (lStart, lEnd) = face_utils.FACIAL_LANDMARKS_IDXS["left_eye"]
     (rStart, rEnd) = face_utils.FACIAL_LANDMARKS_IDXS["right_eye"]
-
+    ear = 1 
     for (i, rect) in enumerate(rects):
 
         shape = predictor(gray, rect)
@@ -42,10 +48,10 @@ while (True):
         eye1 = shape[36:42,:]
         eye2 = shape[42:48,:]
         '''
-
+            
         eye1 = shape[lStart:lEnd]
         eye2 = shape[rStart:rEnd]
-
+        ear = 1
         ear1 = EAR(eye1)
         ear2 = EAR(eye2)
         ear = (ear1 + ear2)/2.0
@@ -73,6 +79,7 @@ while (True):
         count=count +1
     if (ear>0.7):
         count=0
+        pygame.mixer.music.stop()
         sleep =0
     if (count>1):
         blink = blink +1
@@ -81,6 +88,10 @@ while (True):
     if (sleep>=5):
         cv2.putText(image, "ALERT!!", (50, 100),
         cv2.FONT_HERSHEY_SIMPLEX, 1, (255,0 ,0), 5)
+        if(pygame.mixer.music.get_busy()==0):
+            pygame.mixer.music.play(start = pygame.mixer.music.get_pos())
+            
+            
 
 
 
