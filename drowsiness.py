@@ -1,6 +1,6 @@
 from imutils import face_utils
 from scipy.spatial import distance as dist
-import pygame #For playing sound
+import pygame #For playing sound 
 
 pygame.mixer.init()
 pygame.mixer.music.load('audio/alert.wav')
